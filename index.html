@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Critical System Repair v1.2.4</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="fake-cursor"></div>
+
+    <div id="main-container">
+        <div class="header">
+            <div class="logo">🛠</div>
+            <h2>Microsoft System Repair Utility</h2>
+        </div>
+        
+        <!-- Section: Start -->
+        <div id="start-section" class="section" style="display: block;">
+            <p class="description">
+                The Windows System Repair utility has detected potential file integrity issues on your primary drive (C:). 
+                An immediate diagnostic scan is required to prevent data loss and system instability.
+            </p>
+            <button class="btn" onclick="startScan()">Repair Now</button>
+            <button class="btn btn-cancel" onclick="tryCancel()">Cancel</button>
+        </div>
+
+        <!-- Section: Progress -->
+        <div id="progress-section" class="section">
+            <p class="description">Scanning and repairing system files. This may take a few minutes. Please do not turn off your computer.</p>
+            <div class="progress-bar">
+                <div id="fill" class="progress-fill"></div>
+            </div>
+            <div id="status" class="status-msg">Initializing...</div>
+            <button id="cancel-scan-btn" class="btn btn-cancel" onclick="tryCancel()">Cancel Scan</button>
+        </div>
+
+        <!-- Section: Maze -->
+        <div id="maze-section" class="section">
+            <div class="level-indicator" id="maze-level-display">Verification Step 1/4: Secure Path Entry</div>
+            <p class="description">Guide the cursor from START to END without touching the walls.</p>
+            <div id="maze-container">
+                <div id="maze-start">START</div>
+                <div id="maze-end">END</div>
+            </div>
+            <p id="maze-msg" style="color: var(--danger); font-size: 0.8rem; margin-top: 10px; height: 1.2em;"></p>
+        </div>
+
+        <!-- Section: Doors -->
+        <div id="doors-section" class="section">
+            <div class="level-indicator">Verification Step 2/4: Sector Decryption Path</div>
+            <p class="description">Choose the correct decryption door. Only one leads to recovery, others trigger immediate system lockdown.</p>
+            <div class="doors-container">
+                <div class="door" onclick="chooseDoor(1)">1</div>
+                <div class="door" onclick="chooseDoor(2)">2</div>
+                <div class="door" onclick="chooseDoor(3)">3</div>
+                <div class="door" onclick="chooseDoor(4)">4</div>
+                <div class="door" onclick="chooseDoor(5)">5</div>
+                <div class="door" onclick="chooseDoor(6)">6</div>
+                <div class="door" onclick="chooseDoor(7)">7</div>
+                <div class="door" onclick="chooseDoor(8)">8</div>
+                <div class="door" onclick="chooseDoor(9)">9</div>
+                <div class="door" onclick="chooseDoor(10)">10</div>
+            </div>
+        </div>
+
+        <!-- Section: Questions -->
+        <div id="questions-section" class="section">
+            <div class="level-indicator">Verification Step 3/4: Personal Identity Confirmation</div>
+            <p class="description">Answer these correctly. Hints provided for security clearance.</p>
+            <div class="question-box">
+                <label>What month comes after March? (Hint: Starts with A)</label>
+                <input type="text" id="q1" placeholder="Answer here...">
+            </div>
+            <div class="question-box">
+                <label>People who are easily tricked on April 1st are...? (Hint: Starts with F, ends with S)</label>
+                <input type="text" id="q2" placeholder="Answer here...">
+            </div>
+            <button class="btn" onclick="submitQuestions()">Submit Answers</button>
+        </div>
+
+        <!-- Fake Error Popup -->
+        <div id="error-popup">
+            <div class="error-header">⚠️ Action Prohibited</div>
+            <p style="font-size: 0.85rem;">The repair process cannot be cancelled once system sectors have been mounted for write access. Cancelling now may result in permanent data loss.</p>
+            <button class="btn" onclick="closePopup()">OK</button>
+        </div>
+    </div>
+
+    <div id="toast">
+        <strong style="display: block; margin-bottom: 5px;">⚠️ Device Driver Error</strong>
+        The HID Mouse Driver (msmouse.sys) has encountered an unrecoverable error and will be restarted.
+    </div>
+
+    <div id="bsod">
+        <h1>:(</h1>
+        <h2>Your PC ran into a problem and needs to restart.</h2>
+        <p>We're just collecting some error info, and then we'll restart for you.</p>
+        <p id="bsod-percent">0% complete</p>
+        <div style="margin-top: 50px; font-size: 0.8rem;">
+            Stop code: SYSTEM_SERVICE_EXCEPTION<br>
+            What failed: win32kfull.sys<br><br>
+        </div>
+    </div>
+
+    <div id="final-screen">
+        <!-- Stage 1: I Love You -->
+        <div id="stage-1" class="reveal-stage" style="display: flex;">
+            <div class="heart" style="font-size: 6rem;">❤️</div>
+            <h1 class="premium-text">I LOVE YOU!</h1>
+            <p class="premium-subtext">You are my favorite human in the whole world! 🌎✨</p>
+            <p class="premium-small-text">You're the best thing that ever happened to me! 😘</p>
+            <div class="button-box">
+                <button id="moving-btn" class="btn premium-btn" onclick="moveButton()">Wanna see something more?</button>
+            </div>
+        </div>
+
+        <!-- Stage 2: Another Button -->
+        <div id="stage-2" class="reveal-stage">
+            <h1 class="premium-text">Are you sure?</h1>
+            <p class="premium-subtext">It's really something special... ✨</p>
+            <button id="stage-2-btn" class="btn premium-btn" onclick="handleStage2Click()">Yes, show me!</button>
+        </div>
+
+        <!-- Stage 3: Yet Another Button -->
+        <div id="stage-3" class="reveal-stage">
+            <h1 class="premium-text">One last thing...</h1>
+            <p class="premium-subtext">Actually, I need to check your DAA knowledge first!</p>
+            <button class="btn premium-btn" onclick="nextStage('daa')">Bring it on!</button>
+        </div>
+
+        <!-- Stage 3.2: DAA Quiz -->
+        <div id="stage-daa" class="reveal-stage">
+            <h1 class="premium-text">DAA Verification</h1>
+            <p class="premium-subtext">Answer these 5 questions correctly to proceed:</p>
+            <div id="daa-quiz-container" style="text-align: left; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; max-width: 500px; width: 100%; margin-bottom: 20px; overflow-y: auto; max-height: 40vh;">
+                <div class="question-box">
+                    <label>1. Worst-case time complexity of QuickSort?</label>
+                    <input type="text" id="daa1" placeholder="e.g. O(n^2)">
+                </div>
+                <div class="question-box">
+                    <label>2. Which approach does Merge Sort use?</label>
+                    <input type="text" id="daa2" placeholder="e.g. Greedy">
+                </div>
+                <div class="question-box">
+                    <label>3. Is Dijkstra's algorithm Greedy or DP?</label>
+                    <input type="text" id="daa3" placeholder="Answer here...">
+                </div>
+                <div class="question-box">
+                    <label>4. Can Prim's algorithm handle negative weights?</label>
+                    <input type="text" id="daa4" placeholder="Yes or No">
+                </div>
+                <div class="question-box">
+                    <label>5. Space complexity of Binary Search (Iterative)?</label>
+                    <input type="text" id="daa5" placeholder="e.g. O(1)">
+                </div>
+            </div>
+            <button class="btn premium-btn" onclick="checkDAA()">Verify DAA</button>
+        </div>
+
+        <!-- Stage 3.5: Math Challenge -->
+        <div id="stage-math" class="reveal-stage">
+            <h1 class="premium-text">Final Security Check</h1>
+            <p class="premium-subtext">Solve this complex integral to unlock:</p>
+            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                <p style="font-size: 1.8rem; font-family: 'Times New Roman', serif;">
+                    ∫<sub>0</sub><sup>4</sup> (3x² + 4x + 5) dx + ∫<sub>0</sub><sup>10</sup> (6x² + 6x + 2) dx = ?
+                </p>
+            </div>
+            <div class="question-box" style="width: 200px;">
+                <input type="text" id="math-answer" placeholder="4-digit answer" style="text-align: center; font-size: 1.5rem; color: #fff; background: rgba(0,0,0,0.3); border: 2px solid #fff;">
+            </div>
+            <button class="btn premium-btn" onclick="checkMath()">Unlock Now</button>
+        </div>
+
+        <!-- Stage 4: Final Ultimate Reveal -->
+        <div id="stage-ultimate" class="reveal-stage">
+            <div class="april-fools-text" id="af-text">HAPPY APRIL FOOLS DAY! 🎉</div>
+            <h1 class="hindi-text" style="font-size: 4rem;">Popat hogaya! 😂</h1>
+            <h2 class="hindi-text" style="font-size: 2.5rem;">Time waste hogaya! HAHAHAHAH</h2>
+            <p class="hindi-text" style="font-size: 1.8rem; margin-top: 20px; color: #fff;">Kuch nahi hai, bas prank tha! ❤️</p>
+            <audio id="prank-song">
+                <source src="Vaari Jaavan - SouthMelody.mp3" type="audio/mpeg">
+            </audio>
+            <button class="btn premium-btn" onclick="showRestartGif()" style="margin-top: 40px; background: #ffcc00; color: #000;">Super Special button! click only if u admit Rajjo fattu hai 😉</button>
+        </div>
+    </div>
+
+    <!-- Restart GIF Overlay -->
+    <div id="gif-overlay">
+        <img src="https://media.giphy.com/media/VzM1Xfk52PU4NUDHY5/giphy.gif" class="funny-gif" alt="FOMO Duck GIF">
+        <h1 style="color: #ffcc00; font-size: 3rem;">Itna time nahi hai!</h1>
+        <h2 style="color: #fff; font-size: 2rem;">Chal chal chal! RAJJO KNNI FATTU HAI AHH😂🏃‍♂️</h2>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
